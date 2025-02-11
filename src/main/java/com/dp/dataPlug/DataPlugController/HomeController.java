@@ -34,10 +34,14 @@ public class HomeController {
         return fetchdata("http://localhost:8080/oauth/reddit/savedPosts");
     }
 
-
     @GetMapping("/oauth/reddit/upVotedPosts")
     public ResponseEntity<?> fetchUpVotedPosts() {
         return fetchdata("http://localhost:8080/oauth/reddit/upVoted");
+    }
+
+    @GetMapping("/oauth/reddit/downVotedPosts")
+    public ResponseEntity<?> fetchDownVotedPosts() {
+        return fetchdata("http://localhost:8080/oauth/reddit/downVoted");
     }
 
     private ResponseEntity<?> fetchdata(String url){

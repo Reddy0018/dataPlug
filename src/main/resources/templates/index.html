@@ -20,6 +20,15 @@
                 })
                 .catch(error => console.error('Error:', error));
         }
+
+        function fetchdownVotedPosts() {
+            fetch('/oauth/reddit/downVotedPosts')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("jsonOutput").value = JSON.stringify(data, null, 2);
+                })
+                .catch(error => console.error('Error:', error));
+        }
     </script>
 </head>
 <body>
@@ -35,6 +44,7 @@
 <!-- Fetch Data Button -->
 <button onclick="fetchRedditData()">Get Saved Posts</button>
 <button onclick="fetchUpVotedPosts()">Get UpVoted Posts</button>
+<button onclick="fetchdownVotedPosts()">Get DownVoted Posts</button>
 
 <br><br>
 

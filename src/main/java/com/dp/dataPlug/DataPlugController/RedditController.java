@@ -164,6 +164,28 @@ public class RedditController {
         }
     }
 
+    @GetMapping("/downVoted")
+    public ResponseEntity<?> getUserDownVotedPosts() {
+        System.out.println("In getUserDownVotedPosts REST:: ");
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            Map<String, Object> cres =  checks();
+            if(cres!=null){
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(cres);
+            }
+
+            String getSavedPosts = "https://oauth.reddit.com/user/" + userName + "/downvoted";
+            response = sendGenericRESTCallToReddit(accessToken, getSavedPosts);
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            response.put("error", "An error occurred while fetching Saved DownVoted posts");
+            response.put("message", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
     private Map<String, Object>  sendGenericRESTCallToReddit(String accessToken, String URL) {
         //String accessToken = getValidAccessToken(userId);
         System.out.println("In sendGenericRESTCalltoReddit:: ");
