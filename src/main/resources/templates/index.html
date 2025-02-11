@@ -1,28 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Reddit OAuth</title>
+    <title>OAuth</title>
     <script>
-        function fetchRedditData() {
-            fetch('/oauth/reddit/fetchSavedPosts')
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById("jsonOutput").value = JSON.stringify(data, null, 2);
-                })
-                .catch(error => console.error('Error:', error));
-        }
-
-        function fetchUpVotedPosts() {
-            fetch('/oauth/reddit/upVotedPosts')
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById("jsonOutput").value = JSON.stringify(data, null, 2);
-                })
-                .catch(error => console.error('Error:', error));
-        }
-
-        function fetchdownVotedPosts() {
-            fetch('/oauth/reddit/downVotedPosts')
+        function fetchData(url) {
+            fetch(url)
                 .then(response => response.json())
                 .then(data => {
                     document.getElementById("jsonOutput").value = JSON.stringify(data, null, 2);
@@ -42,9 +24,23 @@
 <br><br>
 
 <!-- Fetch Data Button -->
-<button onclick="fetchRedditData()">Get Saved Posts</button>
-<button onclick="fetchUpVotedPosts()">Get UpVoted Posts</button>
-<button onclick="fetchdownVotedPosts()">Get DownVoted Posts</button>
+<button onclick="fetchData('/oauth/reddit/fetchSavedPosts')">Get Saved Posts</button>
+<button onclick="fetchData('/oauth/reddit/upVotedPosts')">Get UpVoted Posts</button>
+<button onclick="fetchData('/oauth/reddit/downVotedPosts')">Get DownVoted Posts</button>
+
+<br><br>
+
+<h2>Spotify OAuth Integration</h2>
+<a th:href="@{/oauth/spotify/login}">
+    <button >Login with Spotify</button>
+</a>
+
+<br><br>
+
+<!-- Fetch Data Button -->
+<button onclick="fetchData('/oauth/spotify/getTopArt')">Top Artists</button>
+<button onclick="fetchData('/oauth/spotify/getUserPlaylists')">Fetch playlists</button>
+<!--<button onclick="fetchdownVotedPosts()">Dummy</button>-->
 
 <br><br>
 

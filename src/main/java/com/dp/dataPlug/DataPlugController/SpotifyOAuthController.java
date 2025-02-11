@@ -70,7 +70,11 @@ public class SpotifyOAuthController {
             Map<String, String> responseBody = response.getBody();
             System.out.println(responseBody);
             ACCESS_TOKEN = responseBody.get("access_token");;
-            return ResponseEntity.ok("User authenticated successfully!");
+//            return ResponseEntity.ok("User authenticated successfully!");
+            if(response.getStatusCode().is2xxSuccessful()){
+                return ResponseEntity.status(HttpStatus.FOUND).header(HttpHeaders.LOCATION, "http://localhost:8080/").build();
+            }
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).header(HttpHeaders.LOCATION, "http://localhost:8080/oauth/reddit/badRequest").build();
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("OAuth failed");
     }

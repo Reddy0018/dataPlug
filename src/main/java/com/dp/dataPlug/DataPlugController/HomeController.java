@@ -44,6 +44,16 @@ public class HomeController {
         return fetchdata("http://localhost:8080/oauth/reddit/downVoted");
     }
 
+    @GetMapping("/oauth/spotify/getTopArt")
+    public ResponseEntity<?> fetchTopArtists() {
+        return fetchdata("http://localhost:8080/oauth/spotify/getTopArtists");
+    }
+
+    @GetMapping("/oauth/spotify/getPlaylists")
+    public ResponseEntity<?> fetchPlaylists() {
+        return fetchdata("http://localhost:8080/oauth/spotify/getUserPlaylists");
+    }
+
     private ResponseEntity<?> fetchdata(String url){
         try{
             Map<String, Object> response = webClientBuilder.build()
