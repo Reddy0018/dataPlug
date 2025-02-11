@@ -4,7 +4,16 @@
     <title>Reddit OAuth</title>
     <script>
         function fetchRedditData() {
-            fetch('/oauth/reddit/callback-data')
+            fetch('/oauth/reddit/fetchSavedPosts')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("jsonOutput").value = JSON.stringify(data, null, 2);
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        function fetchUpVotedPosts() {
+            fetch('/oauth/reddit/upVotedPosts')
                 .then(response => response.json())
                 .then(data => {
                     document.getElementById("jsonOutput").value = JSON.stringify(data, null, 2);
@@ -25,6 +34,7 @@
 
 <!-- Fetch Data Button -->
 <button onclick="fetchRedditData()">Get Saved Posts</button>
+<button onclick="fetchUpVotedPosts()">Get UpVoted Posts</button>
 
 <br><br>
 

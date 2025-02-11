@@ -29,24 +29,31 @@ public class HomeController {
         return "index"; // Loads the Thymeleaf template
     }
 
-    @GetMapping("/oauth/reddit/callback-data")
+    @GetMapping("/oauth/reddit/fetchSavedPosts")
     public ResponseEntity<?> fetchSavedPosts() {
-        String url = "http://localhost:8080/oauth/reddit/savedPosts";
-
-       try{
-           Map<String, Object> response = webClientBuilder.build()
-                   .get()
-                   .uri(url)
-                   .retrieve()
-                   .bodyToMono(Map.class)
-                   .block();
-           return ResponseEntity.ok(response);
-       } catch (Exception e) {
-           Map<String, Object> response = new HashMap<>();
-           response.put("error", e.getMessage());
-           response.put("error_description", "User not authorized");
-           return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-       }
+        return fetchdata("http://localhost:8080/oauth/reddit/savedPosts");
     }
 
+
+    @GetMapping("/oauth/reddit/upVotedPosts")
+    public ResponseEntity<?> fetchUpVotedPosts() {
+        return fetchdata("http://localhost:8080/oauth/reddit/upVoted");
+    }
+
+    private ResponseEntity<?> fetchdata(String url){
+        try{
+            Map<String, Object> response = webClientBuilder.build()
+                    .get()
+                    .uri(url)
+                    .retrieve()
+                    .bodyToMono(Map.class)
+                    .block();
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            Map<String, Object> response = new HashMap<>();
+            response.put("error", e.getMessage());
+            response.put("error_description", "User not authorized");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+    }
 }
