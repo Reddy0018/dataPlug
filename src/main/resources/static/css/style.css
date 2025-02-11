@@ -1,0 +1,80 @@
+/* General body styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+/* Title Styling */
+h2 {
+    color: #333;
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+/* Button Styling */
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin: 5px;
+}
+
+/* Button hover effect */
+button:hover {
+    background-color: #45a049;
+}
+
+/* Link styling for login buttons */
+a {
+    text-decoration: none;
+}
+
+/* Textarea Styling */
+textarea {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 15px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 14px;
+    color: #333;
+    resize: vertical;
+    margin-top: 20px;
+    width: 90%;
+    max-width: 800px;
+}
+
+/* Flexbox for arranging divs side by side */
+.flex-container {
+    display: flex;
+    justify-content: space-around; /* Space the divs evenly */
+    gap: 30px; /* Optional gap between the divs */
+    width: 100%;
+    max-width: 1200px; /* Optional max-width for large screens */
+}
+
+/* Flexbox for buttons container */
+.button-container {
+    display: flex;
+    gap: 15px; /* Add space between buttons */
+    justify-content: center;
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+}
+
+/* Styling for buttons */
+button {
+    width: 200px; /* Ensure buttons are of similar width */
+}

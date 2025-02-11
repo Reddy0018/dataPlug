@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>OAuth</title>
+    <link th:href="@{/css/style.css}" rel="stylesheet" type="text/css">
     <script>
         function fetchData(url) {
             fetch(url)
@@ -14,37 +15,48 @@
     </script>
 </head>
 <body>
-<h2>Reddit OAuth Integration</h2>
+<!-- Flex container for the two main sections -->
+<div class="flex-container">
+    <!-- Reddit OAuth Section -->
+    <div>
+        <h2>Reddit OAuth Integration</h2>
 
-<!-- Login Button -->
-<a th:href="@{/oauth/reddit/login}">
-    <button >Login with Reddit</button>
-</a>
+        <!-- Login Button -->
+        <a th:href="@{/oauth/reddit/login}">
+            <button>Login with Reddit</button>
+        </a>
 
-<br><br>
+        <br><br>
 
-<!-- Fetch Data Button -->
-<button onclick="fetchData('/oauth/reddit/fetchSavedPosts')">Get Saved Posts</button>
-<button onclick="fetchData('/oauth/reddit/upVotedPosts')">Get UpVoted Posts</button>
-<button onclick="fetchData('/oauth/reddit/downVotedPosts')">Get DownVoted Posts</button>
+        <!-- Fetch Data Buttons (wrapped in a flex container) -->
+        <div class="button-container">
+            <button onclick="fetchData('/oauth/reddit/fetchSavedPosts')">Get Saved Posts</button>
+            <button onclick="fetchData('/oauth/reddit/upVotedPosts')">Get UpVoted Posts</button>
+            <button onclick="fetchData('/oauth/reddit/downVotedPosts')">Get DownVoted Posts</button>
+        </div>
+    </div>
 
-<br><br>
+    <!-- Spotify OAuth Section -->
+    <div>
+        <h2>Spotify OAuth Integration</h2>
+        <a th:href="@{/oauth/spotify/login}">
+            <button>Login with Spotify</button>
+        </a>
 
-<h2>Spotify OAuth Integration</h2>
-<a th:href="@{/oauth/spotify/login}">
-    <button >Login with Spotify</button>
-</a>
+        <br><br>
 
-<br><br>
+        <!-- Fetch Data Buttons -->
+        <div class="button-container">
+            <button onclick="fetchData('/oauth/spotify/getTopArt')">Top Artists</button>
+            <button onclick="fetchData('/oauth/spotify/getUserPlaylists')">Fetch Playlists</button>
+        </div>
+    </div>
+</div>
 
-<!-- Fetch Data Button -->
-<button onclick="fetchData('/oauth/spotify/getTopArt')">Top Artists</button>
-<button onclick="fetchData('/oauth/spotify/getUserPlaylists')">Fetch playlists</button>
-<!--<button onclick="fetchdownVotedPosts()">Dummy</button>-->
-
-<br><br>
+<br>
 
 <!-- JSON Output -->
 <textarea id="jsonOutput" rows="15" cols="80" readonly></textarea>
+
 </body>
 </html>
