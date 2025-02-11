@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -37,15 +38,7 @@ public class RedditController {
     @Autowired
     private RestTemplate restTemplate;
 
-    @Autowired
-    private TokenService tokenService;
-
-
-    @GetMapping("/test")
-    public String test(){
-        System.out.println("test123");
-        return "Hello";
-    }
+    private String accessToken=null;
 
     @GetMapping("/login")
     public ResponseEntity<String> redirectToReddit() {
@@ -61,7 +54,6 @@ public class RedditController {
 
     @GetMapping("/callback")
     public ResponseEntity<String> getToken(@RequestParam("code") String code) {
-        System.out.println("In Call back REST:: "+ code);
         HttpHeaders headers = new HttpHeaders();
         headers.setBasicAuth(clientId, clientSecret);
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -76,19 +68,69 @@ public class RedditController {
 
         if (response.getStatusCode() == HttpStatus.OK) {
             Map<String, String> responseBody = response.getBody();
-            System.out.println(responseBody);
             //tokenService.saveToken(tokenResponse); // Save token to DB
-            String accessToken = responseBody.get("access_token");
-            String userName = sendGenericRESTCallToReddit(accessToken,"https://oauth.reddit.com/api/v1/me").get("name").toString();
+            accessToken = responseBody.get("access_token");
+            System.out.println("Access Token:: "+accessToken);
+            /**String userName = sendGenericRESTCallToReddit(accessToken,"https://oauth.reddit.com/api/v1/me").get("name").toString();
             System.out.println("UserName:: "+ userName);
             String getSavedPosts = "https://oauth.reddit.com/user/"+userName+"/saved";
-            sendGenericRESTCallToReddit(accessToken,getSavedPosts);
-            return ResponseEntity.ok("User authenticated successfully!");
+            sendGenericRESTCallToReddit(accessToken,getSavedPosts);*/
+            if(response.getStatusCode().is2xxSuccessful()){
+                return ResponseEntity.status(HttpStatus.FOUND).header(HttpHeaders.LOCATION, "http://localhost:8080/").build();
+            }
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).header(HttpHeaders.LOCATION, "http://localhost:8080/oauth/reddit/badRequest").build();
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("OAuth failed");
     }
 
-    public Map<String, Object>  sendGenericRESTCallToReddit(String accessToken, String URL) {
+    @GetMapping("/badRequest")
+    public String badRequestReddit() {
+        return "Bad Request";
+    }
+
+    /**@GetMapping("/savedPosts")
+    public ResponseEntity<?> getUserSavedPosts(){
+        System.out.println("In getUserSavedPosts REST:: ");
+        Map<String, Object> response = new HashMap<>();
+        if(accessToken==null){
+            response.put("error", "access token is null");
+            return new ResponseEntity<Map<String,Object>>(response,HttpStatus.BAD_REQUEST);
+        }
+        String userName = sendGenericRESTCallToReddit(accessToken,"https://oauth.reddit.com/api/v1/me").get("name").toString();
+         System.out.println("UserName:: "+ userName);
+         String getSavedPosts = "https://oauth.reddit.com/user/"+userName+"/saved";
+        response = sendGenericRESTCallToReddit(accessToken,getSavedPosts);
+        return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK);
+    }*/
+
+    @GetMapping("/savedPosts")
+    public ResponseEntity<?> getUserSavedPosts() {
+        System.out.println("In getUserSavedPosts REST:: ");
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            if (accessToken == null) {
+                response.put("error", "Access token is null");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+            }
+
+            String userName = sendGenericRESTCallToReddit(accessToken, "https://oauth.reddit.com/api/v1/me")
+                    .get("name")
+                    .toString();
+            System.out.println("UserName:: " + userName);
+
+            String getSavedPosts = "https://oauth.reddit.com/user/" + userName + "/saved";
+            response = sendGenericRESTCallToReddit(accessToken, getSavedPosts);
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            response.put("error", "An error occurred while fetching saved posts");
+            response.put("message", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+    private Map<String, Object>  sendGenericRESTCallToReddit(String accessToken, String URL) {
         //String accessToken = getValidAccessToken(userId);
         System.out.println("In sendGenericRESTCalltoReddit:: ");
 

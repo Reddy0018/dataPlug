@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Reddit OAuth</title>
+    <script>
+        function fetchRedditData() {
+            fetch('/oauth/reddit/callback-data')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("jsonOutput").value = JSON.stringify(data, null, 2);
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    </script>
+</head>
+<body>
+<h2>Reddit OAuth Integration</h2>
+
+<!-- Login Button -->
+<a th:href="@{/oauth/reddit/login}">
+    <button >Login with Reddit</button>
+</a>
+
+<br><br>
+
+<!-- Fetch Data Button -->
+<button onclick="fetchRedditData()">Get Saved Posts</button>
+
+<br><br>
+
+<!-- JSON Output -->
+<textarea id="jsonOutput" rows="15" cols="80" readonly></textarea>
+</body>
+</html>
